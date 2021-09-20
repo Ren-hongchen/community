@@ -1,10 +1,11 @@
-package top.renhongchen.community.model;
+package top.renhongchen.community.dto;
 
 
 import lombok.Data;
+import top.renhongchen.community.model.User;
 
 @Data
-public class Post {
+public class PostDTO {
     private Integer id;
     private String title;
     private String description;
@@ -15,4 +16,5 @@ public class Post {
     private Integer likeCount;
     private Long gmtCreate;
     private Long gmtModified;
+    private User user;   //新加
 }
