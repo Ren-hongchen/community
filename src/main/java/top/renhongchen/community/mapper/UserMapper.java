@@ -9,10 +9,10 @@ import top.renhongchen.community.model.User;
 
 @Mapper
 public interface UserMapper {
-    @Select("select * from user where token = #{token}")
+    @Select("select * from user where TKOEN = #{token}")
     User findByToken(@Param("token") String token);
 
-    @Insert("insert into user (name,account_id,token,gmt_create,gmt_modified) " +
+    @Insert("insert into user (NAME,ACCOUNT_ID,TKOEN,GMT_CREATE,GMT_MODIFIED) " +
             "values (#{name},#{accountId},#{token},#{gmtCreate},#{gmtModified})")
     void insert(User user);
 }
