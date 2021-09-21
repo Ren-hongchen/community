@@ -6,6 +6,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import top.renhongchen.community.dto.PaginationDTO;
 import top.renhongchen.community.dto.PostDTO;
 import top.renhongchen.community.mapper.UserMapper;
 import top.renhongchen.community.model.User;
@@ -27,8 +29,14 @@ public class IndexController {
 
     @GetMapping("/")
     public String index(HttpServletRequest httpServletRequest,
-                        Model model) {
+                        Model model,
+                        @RequestParam(value = "page",defaultValue = "1") Integer page,
+                        @RequestParam(value = "size",defaultValue = "5") Integer size) {
         Cookie[] cookies = httpServletRequest.getCookies();
+
+        PaginationDTO pagination = postService.list(page, size);
+        model.addAttribute("pagination", pagination);
+
         if (cookies == null) {
             return "index";
         }
@@ -42,9 +50,6 @@ public class IndexController {
                 break;
             }
         }
-
-        List<PostDTO> postList = postService.list();
-        model.addAttribute("postList",postList);
 
         return "index";
     }
