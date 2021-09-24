@@ -5,6 +5,7 @@ import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
+import top.renhongchen.community.dto.PostDTO;
 import top.renhongchen.community.model.Post;
 
 import java.util.List;
@@ -29,5 +30,8 @@ public interface PostMapper {
 
     @Select("select count(1) from post where creator = #{id}")
     Integer countById(@Param(value = "id") Integer id);
+
+    @Select("select * from post where id = #{id}")
+    Post getById(@Param(value = "id") Integer id);
 
 }
