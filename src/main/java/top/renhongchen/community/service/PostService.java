@@ -24,20 +24,64 @@ public class PostService {
 
     public PaginationDTO list(Integer page, Integer size) {
         PaginationDTO paginationDTO = new PaginationDTO();
+        Integer totalPage;
+
         Integer totalCount = postMapper.count();
-        paginationDTO.setPagination(totalCount, page, size);
+
+        if (totalCount % size == 0) {
+            totalPage = totalCount / size;
+        } else {
+            totalPage = totalCount / size + 1;
+        }
 
         if (page < 1) {
             page = 1;
         }
-
-        if (page > paginationDTO.getTotalPage()) {
-            page = paginationDTO.getTotalPage();
+        if (page > totalPage) {
+            page = totalPage;
         }
+
+        paginationDTO.setPagination(totalPage, page);
 
         //size*(page-1)
         Integer offset = size * (page - 1);
         List<Post> postList = postMapper.list(offset, size);
+        List<PostDTO> postDTOList = new ArrayList<>();
+        for(Post post :postList) {
+            User user = userMapper.findById(post.getCreator());
+            PostDTO postDTO = new PostDTO();
+            BeanUtils.copyProperties(post,postDTO);
+            postDTO.setUser(user);
+            postDTOList.add(postDTO);
+        }
+        paginationDTO.setPostList(postDTOList);
+        return paginationDTO;
+    }
+
+    public PaginationDTO list(Integer id, Integer page, Integer size) {
+        PaginationDTO paginationDTO = new PaginationDTO();
+        Integer totalPage;
+
+        Integer totalCount = postMapper.countById(id);
+
+        if (totalCount % size == 0) {
+            totalPage = totalCount / size;
+        } else {
+            totalPage = totalCount / size + 1;
+        }
+
+        if (page < 1) {
+            page = 1;
+        }
+        if (page > totalPage) {
+            page = totalPage;
+        }
+
+        paginationDTO.setPagination(totalPage, page);
+
+        //size*(page-1)
+        Integer offset = size * (page - 1);
+        List<Post> postList = postMapper.listById(id,offset, size);
         List<PostDTO> postDTOList = new ArrayList<>();
         for(Post post :postList) {
             User user = userMapper.findById(post.getCreator());

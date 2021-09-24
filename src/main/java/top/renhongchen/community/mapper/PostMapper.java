@@ -21,4 +21,13 @@ public interface PostMapper {
 
     @Select("select count(1) from post")
     Integer count();   //统计表中行数
+
+    @Select("select * from post where creator = #{id} limit #{offset},#{size}")
+    List<Post> listById(@Param(value = "id") Integer id,
+                        @Param(value = "offset") Integer offset,
+                        @Param(value = "size") Integer size);
+
+    @Select("select count(1) from post where creator = #{id}")
+    Integer countById(@Param(value = "id") Integer id);
+
 }
