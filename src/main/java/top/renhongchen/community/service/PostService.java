@@ -1,6 +1,6 @@
 package top.renhongchen.community.service;
 
-
+import org.apache.ibatis.session.RowBounds;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -9,6 +9,7 @@ import top.renhongchen.community.dto.PostDTO;
 import top.renhongchen.community.mapper.PostMapper;
 import top.renhongchen.community.mapper.UserMapper;
 import top.renhongchen.community.model.Post;
+import top.renhongchen.community.model.PostExample;
 import top.renhongchen.community.model.User;
 
 import java.util.ArrayList;
@@ -26,7 +27,7 @@ public class PostService {
         PaginationDTO paginationDTO = new PaginationDTO();
         Integer totalPage;
 
-        Integer totalCount = postMapper.count();
+        Integer totalCount = (int) postMapper.countByExample(new PostExample());
 
         if (totalCount % size == 0) {
             totalPage = totalCount / size;
@@ -48,10 +49,10 @@ public class PostService {
 
         //size*(page-1)
         Integer offset = size * (page - 1);
-        List<Post> postList = postMapper.list(offset, size);
+        List<Post> postList = postMapper.selectByExampleWithBLOBsWithRowbounds(new PostExample(),new RowBounds(offset,size));
         List<PostDTO> postDTOList = new ArrayList<>();
         for(Post post :postList) {
-            User user = userMapper.findById(post.getCreator());
+            User user = userMapper.selectByPrimaryKey(post.getCreator());
             PostDTO postDTO = new PostDTO();
             BeanUtils.copyProperties(post,postDTO);
             postDTO.setUser(user);
@@ -65,7 +66,9 @@ public class PostService {
         PaginationDTO paginationDTO = new PaginationDTO();
         Integer totalPage;
 
-        Integer totalCount = postMapper.countById(id);
+        PostExample postExample = new PostExample();
+        postExample.createCriteria().andCreatorEqualTo(id);
+        Integer totalCount = (int) postMapper.countByExample(postExample);
 
         if (totalCount % size == 0) {
             totalPage = totalCount / size;
@@ -87,10 +90,12 @@ public class PostService {
 
         //size*(page-1)
         Integer offset = size * (page - 1);
-        List<Post> postList = postMapper.listById(id,offset, size);
+        PostExample postExample1 = new PostExample();
+        postExample1.createCriteria().andCreatorEqualTo(id);
+        List<Post> postList = postMapper.selectByExampleWithBLOBsWithRowbounds(postExample1,new RowBounds(offset,size));
         List<PostDTO> postDTOList = new ArrayList<>();
         for(Post post :postList) {
-            User user = userMapper.findById(post.getCreator());
+            User user = userMapper.selectByPrimaryKey(post.getCreator());
             PostDTO postDTO = new PostDTO();
             BeanUtils.copyProperties(post,postDTO);
             postDTO.setUser(user);
@@ -101,8 +106,8 @@ public class PostService {
     }
 
     public PostDTO getById(Integer id) {
-        Post post = postMapper.getById(id);
-        User user = userMapper.findById(post.getCreator());
+        Post post = postMapper.selectByPrimaryKey(id);
+        User user = userMapper.selectByPrimaryKey(post.getCreator());
         PostDTO postDTO = new PostDTO();
         BeanUtils.copyProperties(post,postDTO);
         postDTO.setUser(user);
@@ -116,8 +121,14 @@ public class PostService {
             post.setGmtModified(post.getGmtCreate());
             postMapper.insert(post);
         } else {
-            post.setGmtModified(post.getGmtCreate());
-            postMapper.update(post);
+            Post updatepost = new Post();
+            updatepost.setGmtModified(System.currentTimeMillis());
+            updatepost.setTitle(post.getTitle());
+            updatepost.setTag(post.getTag());
+            updatepost.setDescription(post.getDescription());
+            PostExample postExample = new PostExample();
+            postExample.createCriteria().andIdEqualTo(post.getId());
+            postMapper.updateByExampleSelective(updatepost, postExample);
         }
     }
 }

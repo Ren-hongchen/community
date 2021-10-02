@@ -1,5 +1,6 @@
 package top.renhongchen.community;
 
+import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.web.servlet.support.SpringBootServletInitializer;
@@ -11,6 +12,7 @@ import javax.servlet.SessionTrackingMode;
 import java.util.Collections;
 
 @SpringBootApplication
+@MapperScan("top.renhongchen.community.mapper")
 public class CommunityApplication extends SpringBootServletInitializer {
 
 	public static void main(String[] args) {
