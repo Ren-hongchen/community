@@ -30,6 +30,9 @@ public class PostService {
 
         if (totalCount % size == 0) {
             totalPage = totalCount / size;
+            if(totalPage == 0) {
+                totalPage = 1;
+            }
         } else {
             totalPage = totalCount / size + 1;
         }
@@ -66,6 +69,9 @@ public class PostService {
 
         if (totalCount % size == 0) {
             totalPage = totalCount / size;
+            if(totalPage == 0) {
+                totalPage=1;
+            }
         } else {
             totalPage = totalCount / size + 1;
         }
@@ -102,5 +108,16 @@ public class PostService {
         postDTO.setUser(user);
 
         return postDTO;
+    }
+
+    public void createOrUpdate(Post post) {
+        if(post.getId() == null) {
+            post.setGmtCreate(System.currentTimeMillis());
+            post.setGmtModified(post.getGmtCreate());
+            postMapper.insert(post);
+        } else {
+            post.setGmtModified(post.getGmtCreate());
+            postMapper.update(post);
+        }
     }
 }

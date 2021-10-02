@@ -1,10 +1,7 @@
 package top.renhongchen.community.mapper;
 
 
-import org.apache.ibatis.annotations.Insert;
-import org.apache.ibatis.annotations.Mapper;
-import org.apache.ibatis.annotations.Param;
-import org.apache.ibatis.annotations.Select;
+import org.apache.ibatis.annotations.*;
 import top.renhongchen.community.dto.PostDTO;
 import top.renhongchen.community.model.Post;
 
@@ -34,4 +31,6 @@ public interface PostMapper {
     @Select("select * from post where id = #{id}")
     Post getById(@Param(value = "id") Integer id);
 
+    @Update("update post set title = #{title}, description = #{description}, gmt_modified = #{gmtModified}, tag = #{tag} where id = #{id}")
+    void update(Post post);
 }

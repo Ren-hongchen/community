@@ -8,11 +8,12 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import top.renhongchen.community.dto.AccessTokenDTO;
 import top.renhongchen.community.dto.GithubUserDTO;
-import top.renhongchen.community.mapper.UserMapper;
 import top.renhongchen.community.model.User;
 import top.renhongchen.community.provider.GithubProvider;
+import top.renhongchen.community.service.UserService;
 
 import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.UUID;
 
@@ -23,7 +24,7 @@ public class AuthorizeController {
     private GithubProvider githubProvider;
 
     @Autowired
-    private UserMapper userMapper;
+    private UserService userService;
 
     @Value("${Github.clientId}")
     private String clientId;
@@ -52,12 +53,20 @@ public class AuthorizeController {
             String token = UUID.randomUUID().toString();
             user.setToken(token);
             user.setAccountId(String.valueOf(githubUserDTO.getId()));
-            user.setGmtCreate(System.currentTimeMillis());
-            user.setGmtModified((user.getGmtCreate()));
             user.setAvatarUrl(githubUserDTO.getAvatarUrl());
-            userMapper.insert(user);
+            userService.createOrUpdate(user);
             httpServletResponse.addCookie(new Cookie("token",token));
         }
+        return "redirect:/";
+    }
+
+    @GetMapping("/logout")
+    public String logout(HttpServletRequest request,
+                         HttpServletResponse response) {
+        request.getSession().removeAttribute("user");
+        Cookie cookie = new Cookie("token", null);
+        cookie.setMaxAge(0);
+        response.addCookie(cookie);
         return "redirect:/";
     }
 }

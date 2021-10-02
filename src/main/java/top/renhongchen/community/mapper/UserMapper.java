@@ -1,10 +1,7 @@
 package top.renhongchen.community.mapper;
 
 
-import org.apache.ibatis.annotations.Insert;
-import org.apache.ibatis.annotations.Mapper;
-import org.apache.ibatis.annotations.Param;
-import org.apache.ibatis.annotations.Select;
+import org.apache.ibatis.annotations.*;
 import top.renhongchen.community.model.User;
 
 @Mapper
@@ -18,4 +15,10 @@ public interface UserMapper {
 
     @Select("select * from user where ID = #{id}")
     User findById(@Param("id") Integer id);
+
+    @Select("select * from user where ACCOUNT_ID = #{accountId}")
+    User findByAccountId(@Param(value = "accountId") String accountId);
+
+    @Update("update user set NAME=#{name},TOKEN=#{token},GMT_MODIFIED=#{gmtModified},avatar_url=#{avatarUrl}")
+    void update(User dbUser);
 }
