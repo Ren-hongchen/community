@@ -139,4 +139,13 @@ public class PostService {
             }
         }
     }
+
+    public void addView(Integer id) {
+        Post raw_post = postMapper.selectByPrimaryKey(id);
+        Post post = new Post();
+        post.setViewCount(raw_post.getViewCount() + 1);
+        PostExample postExample = new PostExample();
+        postExample.createCriteria().andIdEqualTo(id);
+        postMapper.updateByExampleSelective(post,postExample);
+    }
 }
