@@ -1,13 +1,13 @@
 package top.renhongchen.community.exception;
 
-public class CustomizeException extends RuntimeException{
+public class CustomizeHardException extends RuntimeException{
     private String message;
 
-    public CustomizeException(ICustomizeErrorCode errorCode) {
+    public CustomizeHardException(CustomizeErrorCode errorCode) {
         this.message = errorCode.getMessage();
     }
 
-    public CustomizeException(String message) {
+    public CustomizeHardException(String message, Integer code) {
         this.message = message;
     }
 
@@ -15,4 +15,5 @@ public class CustomizeException extends RuntimeException{
     public String getMessage() {
         return message;
     }
+
 }

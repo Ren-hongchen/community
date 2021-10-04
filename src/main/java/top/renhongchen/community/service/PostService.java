@@ -7,7 +7,7 @@ import org.springframework.stereotype.Service;
 import top.renhongchen.community.dto.PaginationDTO;
 import top.renhongchen.community.dto.PostDTO;
 import top.renhongchen.community.exception.CustomizeErrorCode;
-import top.renhongchen.community.exception.CustomizeException;
+import top.renhongchen.community.exception.CustomizeHardException;
 import top.renhongchen.community.mapper.PostMapper;
 import top.renhongchen.community.mapper.UserMapper;
 import top.renhongchen.community.model.Post;
@@ -110,7 +110,7 @@ public class PostService {
     public PostDTO getById(Integer id) {
         Post post = postMapper.selectByPrimaryKey(id);
         if (post == null) {
-            throw new CustomizeException(CustomizeErrorCode.QUESTION_NOT_FOUND);
+            throw new CustomizeHardException(CustomizeErrorCode.QUESTION_NOT_FOUND);
         }
         User user = userMapper.selectByPrimaryKey(post.getCreator());
         PostDTO postDTO = new PostDTO();
@@ -135,7 +135,7 @@ public class PostService {
             postExample.createCriteria().andIdEqualTo(post.getId());
             int updated = postMapper.updateByExampleSelective(updatepost, postExample);
             if (updated != 1) {
-                throw new CustomizeException(CustomizeErrorCode.QUESTION_NOT_FOUND);
+                throw new CustomizeHardException(CustomizeErrorCode.QUESTION_NOT_FOUND);
             }
         }
     }
