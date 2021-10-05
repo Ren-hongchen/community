@@ -6,7 +6,7 @@ import top.renhongchen.community.model.User;
 
 @Data
 public class PostDTO {
-    private Integer id;
+    private Long id;
     private String title;
     private String description;
     private String tag;

@@ -64,7 +64,7 @@ public class PostService {
         return paginationDTO;
     }
 
-    public PaginationDTO list(Integer id, Integer page, Integer size) {
+    public PaginationDTO list(Long id, Integer page, Integer size) {
         PaginationDTO paginationDTO = new PaginationDTO();
         Integer totalPage;
 
@@ -107,7 +107,7 @@ public class PostService {
         return paginationDTO;
     }
 
-    public PostDTO getById(Integer id) {
+    public PostDTO getById(Long id) {
         Post post = postMapper.selectByPrimaryKey(id);
         if (post == null) {
             throw new CustomizeHardException(CustomizeErrorCode.QUESTION_NOT_FOUND);
@@ -140,10 +140,19 @@ public class PostService {
         }
     }
 
-    public void addView(Integer id) {
+    public void addViewCount(Long id) {
         Post raw_post = postMapper.selectByPrimaryKey(id);
         Post post = new Post();
         post.setViewCount(raw_post.getViewCount() + 1);
+        PostExample postExample = new PostExample();
+        postExample.createCriteria().andIdEqualTo(id);
+        postMapper.updateByExampleSelective(post,postExample);
+    }
+
+    public void addCommentCount(Long id) {
+        Post raw_post = postMapper.selectByPrimaryKey(id);
+        Post post = new Post();
+        post.setCommentCount(raw_post.getCommentCount() + 1);
         PostExample postExample = new PostExample();
         postExample.createCriteria().andIdEqualTo(id);
         postMapper.updateByExampleSelective(post,postExample);
