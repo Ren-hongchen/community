@@ -23,7 +23,8 @@ public class CustomizeExceptionHandler {   //拦截系统错误，防止传给�
             //处理应用异常
             String message = CustomizeErrorCode.getMessageByCode(e.getMessage());
             Map<String,String> map = new HashMap<>();
-            map.put(e.getMessage(),message);
+            map.put("code",e.getMessage());
+            map.put("message",message);
             ModelAndView modelAndView = new ModelAndView(new MappingJackson2JsonView());
             modelAndView.addAllObjects(map);
             return modelAndView;
