@@ -13,7 +13,14 @@ function post() {
         success: function (response) {
                 if (response.code == 200) {
                     $("#comment_section").hide();
-                } else {
+                } if(response.code == 001) {
+                    var isAccepted = window.confirm(response.message);
+                    if(isAccepted) {
+                        window.open("https://github.com/login/oauth/authorize?client_id=1f653623fb8a6b3b6f54&redirect_uri=http://localhost:8080/callback&scope=user&state=1");
+                        window.localStorage.setItem("closable",true);
+                    }
+                }
+                else {
                     alert(response.message);
                 }
                 console.log(response);
