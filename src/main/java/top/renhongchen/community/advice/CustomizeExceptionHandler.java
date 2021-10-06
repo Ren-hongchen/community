@@ -17,14 +17,11 @@ import java.util.Map;
 @ControllerAdvice
 public class CustomizeExceptionHandler {   //拦截系统错误，防止传给用户
 
-    @Autowired
-    CustomizeErrorCode customizeErrorCode;
-
     @ExceptionHandler(Exception.class)
     ModelAndView handle(Throwable e, Model model) {
         if (e instanceof CustomizeAppException) {
             //处理应用异常
-            String message = customizeErrorCode.getMessageByCode(e.getMessage());
+            String message = CustomizeErrorCode.getMessageByCode(e.getMessage());
             Map<String,String> map = new HashMap<>();
             map.put(e.getMessage(),message);
             ModelAndView modelAndView = new ModelAndView(new MappingJackson2JsonView());

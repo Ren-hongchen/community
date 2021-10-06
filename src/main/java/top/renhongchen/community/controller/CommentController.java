@@ -6,7 +6,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 import top.renhongchen.community.dto.CommentDTO;
+import top.renhongchen.community.dto.ResultDTO;
 import top.renhongchen.community.exception.CustomizeAppException;
+import top.renhongchen.community.exception.CustomizeErrorCode;
 import top.renhongchen.community.mapper.CommentMapper;
 import top.renhongchen.community.model.Comment;
 import top.renhongchen.community.model.User;
@@ -36,6 +38,6 @@ public class CommentController {
         comment.setType(commentDTO.getType());
         comment.setGmtModified(0L);
         commentService.insert(comment);
-        return null;
+        return ResultDTO.okOf();
     }
 }

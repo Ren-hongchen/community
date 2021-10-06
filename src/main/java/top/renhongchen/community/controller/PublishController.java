@@ -57,6 +57,9 @@ public class PublishController {
         post.setTag(tag);
         post.setCreator(user.getId());
         post.setId(id);
+        post.setViewCount(0);
+        post.setCommentCount(0);
+        post.setLikeCount(0);
         postService.createOrUpdate(post);
 
         return "redirect:/";
