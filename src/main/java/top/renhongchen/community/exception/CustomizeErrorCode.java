@@ -6,7 +6,8 @@ public enum CustomizeErrorCode implements ICustomizeErrorCode {
     PARENTID_NOT_FOUND("评论不在，要不要换个试试？","201"),
     TYPE_IS_WRONG("请求错误，请重试","202"),
     NOT_LOGIN("未登录，请登录","001"),
-    SUCCESS("成功","200");
+    SUCCESS("成功","200"),
+    COMMENT_IS_EMPTY("评论不能为空","201");
 
     @Override
     public String getMessage() {

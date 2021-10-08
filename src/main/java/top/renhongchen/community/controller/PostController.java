@@ -27,7 +27,7 @@ public class PostController {
                        Model model) {
         PostDTO postDTO = postService.getById(id);
 
-        List<CommentDTO> commentDTOList = commentService.listByPostId(id);
+        List<CommentDTO> commentDTOList = commentService.listByTargetId(id,1);
 
         postService.addViewCount(id);
         model.addAttribute("post",postDTO);

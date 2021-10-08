@@ -1,11 +1,10 @@
 package top.renhongchen.community.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.*;
 import top.renhongchen.community.dto.CommentCreateDTO;
+import top.renhongchen.community.dto.CommentDTO;
 import top.renhongchen.community.dto.ResultDTO;
 import top.renhongchen.community.exception.CustomizeAppException;
 import top.renhongchen.community.model.Comment;
@@ -13,6 +12,7 @@ import top.renhongchen.community.model.User;
 import top.renhongchen.community.service.CommentService;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.List;
 
 @RestController
 public class CommentController {
@@ -37,5 +37,13 @@ public class CommentController {
         comment.setGmtModified(0L);
         commentService.insert(comment);
         return ResultDTO.okOf();
+    }
+
+    @ResponseBody
+    @RequestMapping(value = "/comment/{id}",method = RequestMethod.GET)
+    public ResultDTO<List<CommentDTO>> sub_comment(@PathVariable(value = "id") Long id,
+                                                   Model model) {
+        List<CommentDTO> commentDTOs = commentService.listByTargetId(id, 2);
+        return ResultDTO.okOf(commentDTOs);
     }
 }
